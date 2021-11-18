@@ -10,10 +10,9 @@ function ListItems({ arr, filterWord, deleteContact }) {
         }
     }).map((val, index) => {
         return (
-            <li key={index}>{val.name}: {val.number}
+            <li key={index}>{val.name}: {val.phone}
                 <button className="delete-button" id={val.name} type="button" onClick={deleteContact}>Delete</button>
-            </li>
-            
+            </li>  
         )
     })     
     return (

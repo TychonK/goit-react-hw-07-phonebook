@@ -8,17 +8,17 @@ import Filter from './components/Filter/Filter'
 import { connect } from 'react-redux'
 import * as actions from './redux/actions'
 
+import axios from "axios"
+
 function App({ contacts, filter, onLoad }) {
 
   useEffect(() => {
-        if (localStorage.getItem("contacts")) {
-            onLoad(JSON.parse(localStorage.getItem("contacts")))
-        }
+    axios
+      .get('https://6196735baf46280017e7e0cd.mockapi.io/phonebook/contacts')
+      .then(res => { return res.data })
+      .catch(err => console.log(err))
+      .then(data => onLoad(data))
     }, [])
-
-  useEffect(() => {
-     localStorage.setItem("contacts", JSON.stringify(contacts))
-  }, [contacts])
 
     return (
       <div className="App">
