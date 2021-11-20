@@ -2,36 +2,50 @@
 import { configureStore, createReducer } from '@reduxjs/toolkit'
 import * as actions from './actions'
 
-const initialState = { contacts: [], filter: '' }
+const initialState = { contacts: [], filter: '', loading: false, }
 
 const reducer = createReducer(initialState, {
-    [actions.addContact]: (state, action) => {
-        return {
-            ...state,
-            contacts: [...state.contacts, action.payload]
-        };
-    },
-    [actions.deleteContact]: (state, action) => {
-        const contactsList = state.contacts.filter(contact => contact.name !== action.payload.target.id);
-            return {
-                ...state,
-                contacts: contactsList
-        };
-    },
     [actions.filter]: (state, action) => {
         return {
-                ...state,
-                filter: action.payload.target.value
+            ...state,
+            filter: action.payload.target.value
         };
     },
-    [actions.pageLoaded]: (state, action) => {
+    [actions.fetchStart]: (state, action) => {
         return {
             ...state,
-            contacts: action.payload
-        };
-    }
-
+            loading: true,
+        }
+    },
+    [actions.fetchSuccess]: (state, action) => {
+        return {
+            ...state,
+            loading: false,
+            contacts: [...state.contacts, ...action.payload],
+        }
+    },
+    [actions.fetchFailure]: (state, action) => {
+        return {
+            ...state,
+            loading: false,
+        }
+    },
+    [actions.deleteFetchSuccess]: (state, action) => {
+        const newContacts = state.contacts.filter(contact => contact.name != action.payload.name)
+        return {
+            ...state,
+            loading: false,
+            contacts: newContacts
+        }
+    },
 })
+
+const store = configureStore({
+    reducer: reducer,
+    devTools: process.env.NODE_ENV === "development",
+})
+
+export default store;
 
 // const reducer = (state = initialState, action) => {
 //     console.log(action)
@@ -67,10 +81,3 @@ const reducer = createReducer(initialState, {
 // };
 
 // const store = createStore(reducer, composeWithDevTools());
-
-const store = configureStore({
-    reducer: reducer,
-    devTools: process.env.NODE_ENV === "development",
-})
-
-export default store;

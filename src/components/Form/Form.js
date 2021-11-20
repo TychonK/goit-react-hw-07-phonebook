@@ -28,8 +28,8 @@ function Form({ onSubmit, existing }) {
       }
       
         const obj = {
-        name: name,
-        number: number,
+          name: name,
+          phone: number,
         }
 
         onSubmit(obj)

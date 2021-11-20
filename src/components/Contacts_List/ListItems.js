@@ -11,7 +11,7 @@ function ListItems({ arr, filterWord, deleteContact }) {
     }).map((val, index) => {
         return (
             <li key={index}>{val.name}: {val.phone}
-                <button className="delete-button" id={val.name} type="button" onClick={deleteContact}>Delete</button>
+                <button className="delete-button" id={val.id} type="button" onClick={deleteContact}>Delete</button>
             </li>  
         )
     })     

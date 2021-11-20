@@ -1,5 +1,7 @@
 import './App.scss';
 import { useEffect } from 'react';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
 
 import ListItems from './components/Contacts_List/ListItems'
 import Form from './components/Form/Form'
@@ -8,17 +10,11 @@ import Filter from './components/Filter/Filter'
 import { connect } from 'react-redux'
 import * as actions from './redux/actions'
 
-import axios from "axios"
-
-function App({ contacts, filter, onLoad }) {
+function App({ contacts, filter, loading, onLoad }) {
 
   useEffect(() => {
-    axios
-      .get('https://6196735baf46280017e7e0cd.mockapi.io/phonebook/contacts')
-      .then(res => { return res.data })
-      .catch(err => console.log(err))
-      .then(data => onLoad(data))
-    }, [])
+    onLoad()
+  }, [])
 
     return (
       <div className="App">
@@ -27,6 +23,13 @@ function App({ contacts, filter, onLoad }) {
         <h3>Find contacts by name</h3>
         <Filter filter={filter}/>
         <ul>
+          {loading && <Loader
+            className="loader"
+            type="Puff"
+            color="#00BFFF"
+            height={100}
+            width={100}
+          />}
           <ListItems arr={contacts} filter={filter} />
         </ul>
       </div>
@@ -37,12 +40,13 @@ const mapStateToProps = state => {
   return {
     contacts: state.contacts,
     filter: state.filter,
+    loading: state.loading,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLoad: (existingContacts) => dispatch(actions.pageLoaded(existingContacts))
+    onLoad: () => dispatch(actions.fetchOnPageLoad())
   }
 }
 
